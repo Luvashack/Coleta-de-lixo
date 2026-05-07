@@ -541,7 +541,7 @@ function desenharRota(rota) {
 
 
        texto = texto.replaceAll(
-        "Go straight ",
+        "Go straight",
         "Siga reto"
       );
 
