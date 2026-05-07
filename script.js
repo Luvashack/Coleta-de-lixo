@@ -218,7 +218,9 @@ function desenharRota(rota) {
 
       let texto = el.innerHTML;
 
+      // =========================
       // DIREÇÕES
+      // =========================
       texto = texto.replaceAll("northwest", "noroeste");
       texto = texto.replaceAll("northeast", "nordeste");
       texto = texto.replaceAll("southwest", "sudoeste");
@@ -229,7 +231,9 @@ function desenharRota(rota) {
       texto = texto.replaceAll("east", "leste");
       texto = texto.replaceAll("west", "oeste");
 
-      // AÇÕES
+      // =========================
+      // AÇÕES PRINCIPAIS
+      // =========================
       texto = texto.replaceAll("Head", "Siga");
 
       texto = texto.replaceAll(
@@ -240,6 +244,26 @@ function desenharRota(rota) {
       texto = texto.replaceAll(
         "Make a U-turn",
         "Faça um retorno"
+      );
+
+      texto = texto.replaceAll(
+        "Turn sharp right",
+        "Vire fortemente à direita"
+      );
+
+      texto = texto.replaceAll(
+        "Turn sharp left",
+        "Vire fortemente à esquerda"
+      );
+
+      texto = texto.replaceAll(
+        "Turn slight right",
+        "Vire levemente à direita"
+      );
+
+      texto = texto.replaceAll(
+        "Turn slight left",
+        "Vire levemente à esquerda"
       );
 
       texto = texto.replaceAll(
@@ -293,11 +317,104 @@ function desenharRota(rota) {
       );
 
       texto = texto.replaceAll(
+        "Continue straight",
+        "Continue em frente"
+      );
+
+      texto = texto.replaceAll(
         "Continue",
         "Continue"
       );
 
+      // =========================
+      // RODOVIAS / ACESSOS
+      // =========================
+      texto = texto.replaceAll(
+        "Merge left",
+        "Entre à esquerda"
+      );
+
+      texto = texto.replaceAll(
+        "Merge right",
+        "Entre à direita"
+      );
+
+      texto = texto.replaceAll(
+        "Take the ramp",
+        "Pegue a saída"
+      );
+
+      texto = texto.replaceAll(
+        "Take the ramp on the left",
+        "Pegue a saída à esquerda"
+      );
+
+      texto = texto.replaceAll(
+        "Take the ramp on the right",
+        "Pegue a saída à direita"
+      );
+
+      texto = texto.replaceAll(
+        "Exit",
+        "Saída"
+      );
+
+      texto = texto.replaceAll(
+        "Keep left",
+        "Mantenha-se à esquerda"
+      );
+
+      texto = texto.replaceAll(
+        "Keep right",
+        "Mantenha-se à direita"
+      );
+
+      // =========================
+      // ROTATÓRIAS
+      // =========================
+      texto = texto.replaceAll(
+        "Enter the roundabout",
+        "Entre na rotatória"
+      );
+
+      texto = texto.replaceAll(
+        "At the roundabout",
+        "Na rotatória"
+      );
+
+      texto = texto.replaceAll(
+        "Take the 1st exit",
+        "Pegue a 1ª saída"
+      );
+
+      texto = texto.replaceAll(
+        "Take the 2nd exit",
+        "Pegue a 2ª saída"
+      );
+
+      texto = texto.replaceAll(
+        "Take the 3rd exit",
+        "Pegue a 3ª saída"
+      );
+
+      texto = texto.replaceAll(
+        "Take the 4th exit",
+        "Pegue a 4ª saída"
+      );
+
+      texto = texto.replaceAll(
+        "Take the 5th exit",
+        "Pegue a 5ª saída"
+      );
+
+      texto = texto.replaceAll(
+        "Roundabout",
+        "Rotatória"
+      );
+
+      // =========================
       // DESTINO
+      // =========================
       texto = texto.replaceAll(
         "You have arrived at your destination, on the left",
         "Você chegou ao seu destino, à esquerda"
@@ -323,12 +440,9 @@ function desenharRota(rota) {
         "Parada"
       );
 
-      texto = texto.replaceAll(
-        "Roundabout",
-        "Rotatória"
-      );
-
+      // =========================
       // PREPOSIÇÕES
+      // =========================
       texto = texto.replaceAll(
         "onto",
         "na"
@@ -339,7 +453,19 @@ function desenharRota(rota) {
         "para permanecer na"
       );
 
+      texto = texto.replaceAll(
+        "toward",
+        "em direção a"
+      );
+
+      texto = texto.replaceAll(
+        "towards",
+        "em direção a"
+      );
+
+      // =========================
       // UNIDADES
+      // =========================
       texto = texto.replaceAll(
         "kilometers",
         "quilômetros"
@@ -380,7 +506,47 @@ function desenharRota(rota) {
         "minuto"
       );
 
+      texto = texto.replaceAll(
+        "seconds",
+        "segundos"
+      );
+
+      texto = texto.replaceAll(
+        "second",
+        "segundo"
+      );
+
+      // =========================
+      // OUTROS
+      // =========================
+      texto = texto.replaceAll(
+        "and continue",
+        "e continue"
+      );
+
+      texto = texto.replaceAll(
+        "for",
+        "por"
+      );
+
+      texto = texto.replaceAll(
+        "via",
+        "via"
+      );
+
+      texto = texto.replaceAll(
+        "Make a sharp right",
+        "Vire à direita"
+      );
+
+
+       texto = texto.replaceAll(
+        "Go straight ",
+        "Siga reto"
+      );
+
       el.innerHTML = texto;
+
     });
 
   }, 300);
