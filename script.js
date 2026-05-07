@@ -206,20 +206,184 @@ function desenharRota(rota) {
 }).addTo(map);
 
   // INSTRUÇÕES (console por enquanto)
-  rotaControle.on('routesfound', function(e) {
+  rotaControle.on('routesfound', function() {
 
-  const instrucoes = e.routes[0].instructions;
+  setTimeout(() => {
 
-  instrucoes.forEach(i => {
+    const instrucoes = document.querySelectorAll(
+      '.leaflet-routing-container .leaflet-routing-alt h2, .leaflet-routing-container .leaflet-routing-alt td'
+    );
 
-    i.text = i.text
-      .replace("Turn right", "Vire à direita")
-      .replace("Turn left", "Vire à esquerda")
-      .replace("Continue", "Continue")
-      .replace("Head", "Siga")
-      .replace("Destination", "Destino");
+    instrucoes.forEach(el => {
 
-  });
+      let texto = el.innerHTML;
+
+      // DIREÇÕES
+      texto = texto.replaceAll("northwest", "noroeste");
+      texto = texto.replaceAll("northeast", "nordeste");
+      texto = texto.replaceAll("southwest", "sudoeste");
+      texto = texto.replaceAll("southeast", "sudeste");
+
+      texto = texto.replaceAll("north", "norte");
+      texto = texto.replaceAll("south", "sul");
+      texto = texto.replaceAll("east", "leste");
+      texto = texto.replaceAll("west", "oeste");
+
+      // AÇÕES
+      texto = texto.replaceAll("Head", "Siga");
+
+      texto = texto.replaceAll(
+        "Make a U-turn and continue",
+        "Faça um retorno e continue"
+      );
+
+      texto = texto.replaceAll(
+        "Make a U-turn",
+        "Faça um retorno"
+      );
+
+      texto = texto.replaceAll(
+        "Make a slight right to stay on",
+        "Faça uma curva leve à direita para permanecer na"
+      );
+
+      texto = texto.replaceAll(
+        "Make a slight left to stay on",
+        "Faça uma curva leve à esquerda para permanecer na"
+      );
+
+      texto = texto.replaceAll(
+        "Make a slight right",
+        "Faça uma curva leve à direita"
+      );
+
+      texto = texto.replaceAll(
+        "Make a slight left",
+        "Faça uma curva leve à esquerda"
+      );
+
+      texto = texto.replaceAll(
+        "Slight right",
+        "Curva leve à direita"
+      );
+
+      texto = texto.replaceAll(
+        "Slight left",
+        "Curva leve à esquerda"
+      );
+
+      texto = texto.replaceAll(
+        "Turn right",
+        "Vire à direita"
+      );
+
+      texto = texto.replaceAll(
+        "Turn left",
+        "Vire à esquerda"
+      );
+
+      texto = texto.replaceAll(
+        "Continue left",
+        "Continue à esquerda"
+      );
+
+      texto = texto.replaceAll(
+        "Continue right",
+        "Continue à direita"
+      );
+
+      texto = texto.replaceAll(
+        "Continue",
+        "Continue"
+      );
+
+      // DESTINO
+      texto = texto.replaceAll(
+        "You have arrived at your destination, on the left",
+        "Você chegou ao seu destino, à esquerda"
+      );
+
+      texto = texto.replaceAll(
+        "You have arrived at your destination, on the right",
+        "Você chegou ao seu destino, à direita"
+      );
+
+      texto = texto.replaceAll(
+        "You have arrived",
+        "Você chegou"
+      );
+
+      texto = texto.replaceAll(
+        "Destination",
+        "Destino"
+      );
+
+      texto = texto.replaceAll(
+        "Waypoint",
+        "Parada"
+      );
+
+      texto = texto.replaceAll(
+        "Roundabout",
+        "Rotatória"
+      );
+
+      // PREPOSIÇÕES
+      texto = texto.replaceAll(
+        "onto",
+        "na"
+      );
+
+      texto = texto.replaceAll(
+        "to stay on",
+        "para permanecer na"
+      );
+
+      // UNIDADES
+      texto = texto.replaceAll(
+        "kilometers",
+        "quilômetros"
+      );
+
+      texto = texto.replaceAll(
+        "kilometer",
+        "quilômetro"
+      );
+
+      texto = texto.replaceAll(
+        "meters",
+        "metros"
+      );
+
+      texto = texto.replaceAll(
+        "meter",
+        "metro"
+      );
+
+      texto = texto.replaceAll(
+        "hours",
+        "horas"
+      );
+
+      texto = texto.replaceAll(
+        "hour",
+        "hora"
+      );
+
+      texto = texto.replaceAll(
+        "minutes",
+        "minutos"
+      );
+
+      texto = texto.replaceAll(
+        "minute",
+        "minuto"
+      );
+
+      el.innerHTML = texto;
+    });
+
+  }, 300);
 
 });
 }
