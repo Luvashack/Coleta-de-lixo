@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Coleta de Lixo</title>
+  <title>Coleta Inteligente</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -17,25 +17,31 @@
 <body>
 
 <header>
-  ♻️ Coleta de Lixo
+  ♻️ Coleta Inteligente
 </header>
 
 <div id="map"></div>
+
+<!-- PAINEL GPS -->
+<div id="painelNavegacao">
+  <div class="direcaoAtual">🧭 Aguardando rota...</div>
+  <div class="distanciaAtual">---</div>
+</div>
 
 <div class="controls">
 
   <button onclick="irParaMinhaLocalizacao()">
     📍 <span>Minha localização</span>
   </button>
+
+  <button onclick="rotaMaisProxima()">
+    🚛 <span>Ir para lixeira cheia</span>
+  </button>
+
   <button onclick="atualizarMapa()">
     🔄 <span>Atualizar</span>
   </button>
-  <button onclick="iniciarColetaInteligente()">
-    🚛 <span>Rota inteligente</span>
-  </button>
-  <button onclick="rotaMaisProxima()">
-    🧭 <span>Rota mais próxima</span>
-  </button>
+
 </div>
 
 <div class="legenda">
