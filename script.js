@@ -3,6 +3,30 @@ const SUPABASE_URL = "https://iyydygckanaydzbjkjwr.supabase.co/rest/v1/container
 const API_KEY = "sb_publishable_fHPmub9Khy8ZWhGEvYq7Fg_KPMwAlrC";
 
 // =========================
+// 🔊 VOZ
+// =========================
+let vozAtivada = false;
+
+function ativarSom() {
+
+  vozAtivada = true;
+
+  falar('Assistente de voz ativado');
+}
+
+function falar(texto) {
+
+  if (!vozAtivada) return;
+
+  const fala = new SpeechSynthesisUtterance(texto);
+
+  fala.lang = 'pt-BR';
+  fala.rate = 1;
+
+  speechSynthesis.speak(fala);
+}
+
+// =========================
 // 🗺️ MAPA
 // =========================
 const map = L.map('map', {
@@ -128,7 +152,6 @@ function iniciarGPS() {
         pos.coords.longitude
       ];
 
-      // ROTAÇÃO BASEADA NA DIREÇÃO
       const heading = pos.coords.heading || 0;
 
       if (!marcadorUsuario) {
@@ -175,6 +198,8 @@ function irParaMinhaLocalizacao() {
 
   if (minhaPosicao) {
     map.setView(minhaPosicao, 17);
+
+    falar('Centralizando localização');
   }
 }
 
@@ -184,7 +209,9 @@ function irParaMinhaLocalizacao() {
 function rotaMaisProxima() {
 
   if (!minhaPosicao) {
+
     alert('Aguardando GPS...');
+
     return;
   }
 
@@ -194,7 +221,11 @@ function rotaMaisProxima() {
   );
 
   if (cheios.length === 0) {
+
     alert('Nenhuma lixeira cheia');
+
+    falar('Nenhuma lixeira cheia encontrada');
+
     return;
   }
 
@@ -215,6 +246,8 @@ function rotaMaisProxima() {
       melhor = c;
     }
   });
+
+  falar('Iniciando navegação');
 
   desenharRota(melhor);
 }
@@ -288,6 +321,8 @@ function desenharRota(destino) {
     document.querySelector('.distanciaAtual').innerHTML =
       `${distanciaKm} km • ${tempoMin} min`;
 
+    falar(`Rota iniciada. Distância de ${distanciaKm} quilômetros`);
+
   });
 }
 
@@ -295,7 +330,10 @@ function desenharRota(destino) {
 // 🔄 ATUALIZAR
 // =========================
 function atualizarMapa() {
+
   carregarContainers();
+
+  falar('Mapa atualizado');
 }
 
 // =========================
