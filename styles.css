@@ -9,7 +9,7 @@ header {
   position: fixed;
   top: 0;
   width: 100%;
-  background: linear-gradient(135deg, #1f1f1f, #2b2b2b);
+  background: linear-gradient(135deg, #00a444, #00dc5c);
   color: white;
   text-align: center;
   padding: 14px;
@@ -44,7 +44,7 @@ header {
   border: none;
   border-radius: 30px;
 
-  background: #2ecc71;
+  background: linear-gradient(#199d50, #00d95a);
   color: white;
   font-size: 14px;
   font-weight: bold;
@@ -65,7 +65,7 @@ header {
   bottom: 20px;
   left: 20px;
 
-  background: rgba(0,0,0,0.75);
+  background: linear-gradient(#1e6505, #00d95a);
   color: white;
 
   padding: 12px;
@@ -108,8 +108,8 @@ header {
   width: 85%;
   max-width: 420px;
 
-  background: rgba(20,20,20,0.9);
-  color: white;
+
+  color: rgb(0, 0, 0);
 
   padding: 16px;
   border-radius: 20px;

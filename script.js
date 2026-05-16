@@ -8,18 +8,14 @@ const API_KEY = "sb_publishable_fHPmub9Khy8ZWhGEvYq7Fg_KPMwAlrC";
 let vozAtivada = false;
 
 function ativarSom() {
-
   vozAtivada = true;
-
   falar('Assistente de voz ativado');
 }
 
 function falar(texto) {
-
   if (!vozAtivada) return;
 
   const fala = new SpeechSynthesisUtterance(texto);
-
   fala.lang = 'pt-BR';
   fala.rate = 1;
 
@@ -27,7 +23,7 @@ function falar(texto) {
 }
 
 // =========================
-// 🗺️ MAPA
+// 🗺️ MAPA (2D PURO)
 // =========================
 const map = L.map('map', {
   zoomControl: false
@@ -48,7 +44,6 @@ let containersData = [];
 let minhaPosicao = null;
 let rotaControle = null;
 let marcadorUsuario = null;
-let watchId = null;
 
 // =========================
 // 📍 ÍCONE USUÁRIO
@@ -65,30 +60,22 @@ const iconeUsuario = L.divIcon({
 async function carregarContainers() {
 
   try {
-
-    const response = await fetch(
-      SUPABASE_URL,
-      {
-        headers: {
-          apikey: API_KEY,
-          Authorization: `Bearer ${API_KEY}`
-        }
+    const response = await fetch(SUPABASE_URL, {
+      headers: {
+        apikey: API_KEY,
+        Authorization: `Bearer ${API_KEY}`
       }
-    );
+    });
 
     const data = await response.json();
-
     containersData = data;
 
     markers.forEach(m => map.removeLayer(m));
-
     markers = [];
 
     data.forEach(c => {
 
-      const cheio =
-        c.status === true ||
-        c.status == 1;
+      const cheio = c.status === true || c.status == 1;
 
       const marker = L.circleMarker(
         [c.latitude, c.longitude],
@@ -108,14 +95,12 @@ async function carregarContainers() {
     });
 
   } catch (erro) {
-
     console.error(erro);
-
   }
 }
 
 // =========================
-// 📏 DISTÂNCIA
+// 📏 DISTÂNCIA (HAVERSINE)
 // =========================
 function calcularDistancia(lat1, lon1, lat2, lon2) {
 
@@ -134,7 +119,7 @@ function calcularDistancia(lat1, lon1, lat2, lon2) {
 }
 
 // =========================
-// 📍 LOCALIZAÇÃO TEMPO REAL
+// 📍 GPS TEMPO REAL (CORRIGIDO)
 // =========================
 function iniciarGPS() {
 
@@ -143,7 +128,7 @@ function iniciarGPS() {
     return;
   }
 
-  watchId = navigator.geolocation.watchPosition(
+  navigator.geolocation.watchPosition(
 
     pos => {
 
@@ -152,30 +137,16 @@ function iniciarGPS() {
         pos.coords.longitude
       ];
 
-      const heading = pos.coords.heading || 0;
-
       if (!marcadorUsuario) {
 
         marcadorUsuario = L.marker(
           minhaPosicao,
-          {
-            icon: iconeUsuario
-          }
+          { icon: iconeUsuario }
         ).addTo(map);
 
       } else {
-
         marcadorUsuario.setLatLng(minhaPosicao);
-
       }
-
-      const elemento = document.querySelector('.usuario-marker');
-
-      if (elemento) {
-        elemento.style.transform = `rotate(${heading}deg)`;
-      }
-
-      map.setView(minhaPosicao, 17);
 
     },
 
@@ -198,75 +169,79 @@ function irParaMinhaLocalizacao() {
 
   if (minhaPosicao) {
     map.setView(minhaPosicao, 17);
-
     falar('Centralizando localização');
   }
 }
 
 // =========================
-// 🧭 LIXEIRA MAIS PRÓXIMA
+// 🚛 ORDENAR POR DISTÂNCIA
 // =========================
-function rotaMaisProxima() {
+function organizarPorDistancia(lista) {
 
-  if (!minhaPosicao) {
+  return lista.sort((a, b) => {
 
-    alert('Aguardando GPS...');
-
-    return;
-  }
-
-  const cheios = containersData.filter(c =>
-    c.status === true ||
-    c.status == 1
-  );
-
-  if (cheios.length === 0) {
-
-    alert('Nenhuma lixeira cheia');
-
-    falar('Nenhuma lixeira cheia encontrada');
-
-    return;
-  }
-
-  let melhor = cheios[0];
-  let menor = Infinity;
-
-  cheios.forEach(c => {
-
-    const d = calcularDistancia(
-      minhaPosicao[0],
-      minhaPosicao[1],
-      c.latitude,
-      c.longitude
+    const distA = calcularDistancia(
+      minhaPosicao[0], minhaPosicao[1],
+      a.latitude, a.longitude
     );
 
-    if (d < menor) {
-      menor = d;
-      melhor = c;
-    }
+    const distB = calcularDistancia(
+      minhaPosicao[0], minhaPosicao[1],
+      b.latitude, b.longitude
+    );
+
+    return distA - distB;
   });
-
-  falar('Iniciando navegação');
-
-  desenharRota(melhor);
 }
 
 // =========================
-// 🗺️ ROTA ESTILO WAZE
+// 🚛 COLETA COMPLETA
 // =========================
-function desenharRota(destino) {
+function iniciarColetaCompleta() {
+
+  if (!minhaPosicao) {
+    alert('Aguardando GPS...');
+    return;
+  }
+
+  const disponiveis = containersData.filter(c =>
+    c.status === false || c.status == 0
+  );
+
+  if (disponiveis.length === 0) {
+    alert('Nenhuma lixeira disponível');
+    return;
+  }
+
+  const rotaOrdenada = organizarPorDistancia(disponiveis);
+
+  desenharRota(rotaOrdenada);
+
+  falar('Iniciando coleta completa');
+}
+
+// =========================
+// 🗺️ DESENHAR ROTA (2D)
+// =========================
+function desenharRota(lista) {
 
   if (rotaControle) {
     map.removeControl(rotaControle);
   }
 
+  const waypoints = [
+    L.latLng(minhaPosicao[0], minhaPosicao[1])
+  ];
+
+  lista.forEach(c => {
+    waypoints.push(
+      L.latLng(c.latitude, c.longitude)
+    );
+  });
+
   rotaControle = L.Routing.control({
 
-    waypoints: [
-      L.latLng(minhaPosicao[0], minhaPosicao[1]),
-      L.latLng(destino.latitude, destino.longitude)
-    ],
+    waypoints: waypoints,
 
     addWaypoints: false,
     draggableWaypoints: false,
@@ -278,7 +253,7 @@ function desenharRota(destino) {
       styles: [
         {
           color: '#007aff',
-          weight: 8,
+          weight: 6,
           opacity: 0.9
         }
       ]
@@ -287,17 +262,13 @@ function desenharRota(destino) {
     createMarker: function(i, wp) {
 
       if (i === 0) {
-
-        return L.marker(
-          wp.latLng,
-          {
-            icon: iconeUsuario
-          }
-        );
+        return L.marker(wp.latLng, { icon: iconeUsuario });
       }
 
-      return L.marker(wp.latLng)
-        .bindPopup('🗑️ Lixeira cheia');
+      return L.circleMarker(wp.latLng, {
+        radius: 8,
+        color: 'orange'
+      }).bindPopup('🗑️ Lixeira');
     }
 
   }).addTo(map);
@@ -305,24 +276,21 @@ function desenharRota(destino) {
   rotaControle.on('routesfound', function(e) {
 
     const rota = e.routes[0];
-
     const resumo = rota.summary;
 
     const distanciaKm =
-      (resumo.totalDistance / 1000)
-      .toFixed(1);
+      (resumo.totalDistance / 1000).toFixed(1);
 
     const tempoMin =
       Math.round(resumo.totalTime / 60);
 
     document.querySelector('.direcaoAtual').innerHTML =
-      '🚛 Siga para a lixeira cheia';
+      '🚛 Coleta completa iniciada';
 
     document.querySelector('.distanciaAtual').innerHTML =
       `${distanciaKm} km • ${tempoMin} min`;
 
-    falar(`Rota iniciada. Distância de ${distanciaKm} quilômetros`);
-
+    falar(`Rota criada com ${lista.length} lixeiras`);
   });
 }
 
@@ -330,9 +298,7 @@ function desenharRota(destino) {
 // 🔄 ATUALIZAR
 // =========================
 function atualizarMapa() {
-
   carregarContainers();
-
   falar('Mapa atualizado');
 }
 
@@ -341,5 +307,4 @@ function atualizarMapa() {
 // =========================
 carregarContainers();
 iniciarGPS();
-
 setInterval(carregarContainers, 5000);
