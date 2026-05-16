@@ -204,16 +204,16 @@ function iniciarColetaCompleta() {
     return;
   }
 
-  const disponiveis = containersData.filter(c =>
-    c.status === false || c.status == 0
+  const cheias = containersData.filter(c =>
+    c.status === true || c.status == 1
   );
 
-  if (disponiveis.length === 0) {
+  if (cheias.length === 0) {
     alert('Nenhuma lixeira disponível');
     return;
   }
 
-  const rotaOrdenada = organizarPorDistancia(disponiveis);
+  const rotaOrdenada = organizarPorDistancia(cheias);
 
   desenharRota(rotaOrdenada);
 
